@@ -4,6 +4,7 @@ from pathlib import Path
 import shutil
 import platform
 import subprocess
+import os
 
 def get_default_downloads_path():
     """
