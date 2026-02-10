@@ -12,7 +12,18 @@ from video_processor import apply_transformations
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app) # Enable CORS for all routes
+
+# Configure CORS with explicit settings
+CORS(app, resources={
+    r"/*": {
+        "origins": "*",
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"],
+        "expose_headers": ["Content-Type"],
+        "supports_credentials": False
+    }
+})
+
 downloader = YouTubeDownloader()
 
 # Global job tracking
