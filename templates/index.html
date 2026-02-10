@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Downloader Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        slate: {
+                            950: '#020617',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.5);
+            --bg-deep: #030712;
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            background-image:
+                linear-gradient(rgba(3, 7, 18, 0.85), rgba(3, 7, 18, 0.85)),
+                url('https://images.unsplash.com/photo-1614850523296-e8c041df43a6?q=80&w=2070&auto=format&fit=crop');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            color: var(--text-main);
+            min-height: 100vh;
+            font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        }
+
+        .premium-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .metric-tile {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .metric-tile:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-4px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .pro-badge {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .cyber-input {
+            background: rgba(2, 6, 23, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .cyber-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+            background: rgba(2, 6, 23, 1);
+        }
+
+        .premium-button {
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .premium-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -10px rgba(79, 70, 229, 0.6);
+            filter: brightness(1.1);
+        }
+
+        .premium-button:active {
+            transform: translateY(0);
+        }
+
+        .circle-pulse {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
+            animation: pulse-ring 1.5s infinite cubic-bezier(0.66, 0, 0, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes pulse-ring {
+            to {
+                box-shadow: 0 0 0 20px rgba(99, 102, 241, 0);
+            }
+        }
+
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-up {
+            animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col items-center justify-start p-4 md:p-8">
+
+    <div class="w-full max-w-5xl py-12">
+        <!-- Header -->
+        <header class="text-center mb-16 animate-fade-up">
+            <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full pro-badge text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+                        clip-rule="evenodd" />
+                </svg>
+                Enterprise Grade
+            </div>
+            <h1
+                class="text-6xl md:text-7xl font-black mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-400">
+                YouTube Downloader <span class="text-primary-400">Pro</span>
+            </h1>
+            <p class="text-slate-400 text-xl font-medium max-w-2xl mx-auto leading-relaxed">
+                Experience high-fidelity media extraction with server-side processing and zero local footprint.
+            </p>
+        </header>
+
+        <!-- Main Card -->
+        <div class="premium-glass rounded-[2.5rem] p-1 md:p-1 shadow-2xl relative overflow-hidden animate-fade-up"
+            style="animation-delay: 0.1s">
+            <div class="p-8 md:p-12">
+                <!-- Input Section -->
+                <div class="relative z-10 flex flex-col md:row gap-4 mb-12">
+                    <div class="flex-1 relative flex flex-col md:flex-row gap-4">
+                        <input type="text" id="urlInput" placeholder="Enter YouTube URL for analysis..."
+                            class="flex-1 p-6 rounded-2xl cyber-input text-white text-lg placeholder:text-slate-600 outline-none">
+
+                        <button onclick="checkVideo()"
+                            class="px-10 py-6 premium-button text-white rounded-2xl font-bold text-lg shadow-lg shadow-indigo-900/40 active:scale-95 flex items-center justify-center gap-3 group whitespace-nowrap">
+                            <span>Analyze Source</span>
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Video Preview Card -->
+                <div id="previewCard"
+                    class="hidden animate-fade-up bg-slate-900/30 rounded-[2rem] border border-white/5 overflow-hidden">
+                    <div class="flex flex-col lg:flex-row">
+                        <!-- Thumbnail Side -->
+                        <div class="lg:w-[45%] relative overflow-hidden group">
+                            <img id="thumbnail" src="" alt="Thumbnail"
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-gradient-to-tr from-slate-950/80 to-transparent"></div>
+                            <div class="absolute bottom-6 left-6 flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-primary-500/20 backdrop-blur-md flex items-center justify-center border border-white/10">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-400"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path
+                                            d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
+                                    </svg>
+                                </div>
+                                <span id="channelInfo" class="text-white font-bold text-sm tracking-wide">Channel
+                                    Info</span>
+                            </div>
+                        </div>
+
+                        <!-- Info & Actions Side -->
+                        <div class="flex-1 p-10 md:p-12 flex flex-col">
+                            <h3 id="videoTitle"
+                                class="text-3xl md:text-4xl font-black mb-8 leading-tight tracking-tight text-white">
+                                Video Title</h3>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                                <div class="space-y-3">
+                                    <label
+                                        class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Output
+                                        Format</label>
+                                    <select id="formatSelect"
+                                        class="w-full p-4 rounded-xl bg-slate-900/50 text-white border border-white/5 focus:ring-2 focus:ring-primary-500 transition-all cursor-pointer appearance-none shadow-inner">
+                                        <option value="video">🎞️ MP4 Video</option>
+                                        <option value="audio">🎵 MP3 Audio</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-3">
+                                    <label
+                                        class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Quality
+                                        Preset</label>
+                                    <select id="qualitySelect"
+                                        class="w-full p-4 rounded-xl bg-slate-900/50 text-white border border-white/5 focus:ring-2 focus:ring-primary-500 transition-all cursor-pointer appearance-none shadow-inner">
+                                        <option value="best">🌟 Premium Best</option>
+                                        <option value="1080p">💎 1080p Ultra HD</option>
+                                        <option value="720p">📺 720p Standard</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div
+                                class="mt-auto pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
+                                <div class="flex items-center gap-4">
+                                    <div class="flex flex-col">
+                                        <span
+                                            class="text-[10px] font-black uppercase tracking-widest text-slate-600">Video
+                                            Duration</span>
+                                        <span id="durationInfo" class="text-white font-bold">--:--</span>
+                                    </div>
+                                </div>
+                                <button onclick="downloadVideo()" id="downloadBtn"
+                                    class="w-full md:w-auto px-12 py-5 premium-button text-white rounded-2xl font-black text-lg transition-all active:scale-95 flex items-center justify-center gap-4">
+                                    <span>Download video</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Premium Progress Dashboard -->
+                    <div id="progressContainer" class="hidden p-10 md:p-12 bg-white/[0.02] border-t border-white/5">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                            <div class="metric-tile p-6 rounded-2xl flex flex-col gap-2">
+                                <span class="text-[10px] font-black uppercase tracking-widest text-primary-400">Fetch
+                                    Speed</span>
+                                <span id="speedText" class="text-2xl font-black text-white">-- MB/s</span>
+                            </div>
+                            <div class="metric-tile p-6 rounded-2xl flex flex-col gap-2">
+                                <span class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Time
+                                    Remaining</span>
+                                <span id="etaText" class="text-2xl font-black text-white">--:--</span>
+                            </div>
+                            <div class="metric-tile p-6 rounded-2xl flex flex-col gap-2">
+                                <span class="text-[10px] font-black uppercase tracking-widest text-emerald-400">File
+                                    Capacity</span>
+                                <span id="sizeInfo" class="text-2xl font-black text-white">-- / --</span>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col items-center justify-center gap-6 py-6">
+                            <div id="downloadPulse" class="circle-pulse">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                                </svg>
+                            </div>
+                            <div class="text-center">
+                                <p id="downloadStatus"
+                                    class="text-lg font-black text-white uppercase tracking-[0.2em] mb-2">Initializing
+                                    Node...</p>
+                                <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">End-to-End
+                                    Encrypted Transfer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status/Loading Overlay -->
+        <div id="statusArea" class="hidden text-center py-20 animate-fade-up">
+            <div class="circle-pulse mx-auto mb-6">
+                <div class="w-2 h-2 bg-white rounded-full animate-ping"></div>
+            </div>
+            <p id="statusText" class="text-2xl font-bold text-slate-200 tracking-tight"></p>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-20 mb-12 text-center animate-fade-up" style="animation-delay: 0.2s">
+            <div class="flex items-center justify-center gap-6 mb-4">
+                <div class="h-px w-12 bg-slate-800"></div>
+                <p class="text-slate-500 text-sm font-black uppercase tracking-[0.3em]">&copy; 2026 YT PRO</p>
+                <div class="h-px w-12 bg-slate-800"></div>
+            </div>
+            <p class="text-slate-600 text-[10px] font-bold uppercase tracking-[0.2em]">Secure Cloud Media Processing
+                Interface</p>
+        </footer>
+    </div>
+
+    <script>
+        // Set this to your Railway URL when deploying, e.g., 'https://your-app.railway.app'
+        const API_BASE = '';
+
+        async function checkVideo() {
+            const urlInput = document.getElementById('urlInput');
+            const url = urlInput.value;
+            if (!url) return;
+
+            document.getElementById('statusArea').classList.remove('hidden');
+            document.getElementById('statusText').innerText = "Analyzing video source...";
+            document.getElementById('previewCard').classList.add('hidden');
+
+            try {
+                const response = await fetch(`${API_BASE}/check`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: url })
+                });
+                const data = await response.json();
+
+                if (data.error) throw new Error(data.error);
+
+                // Update UI
+                document.getElementById('thumbnail').src = data.thumbnail;
+                document.getElementById('videoTitle').innerText = data.title;
+                document.getElementById('channelInfo').innerText = data.uploader;
+                document.getElementById('durationInfo').innerText = `Duration: ${data.duration}`;
+
+                document.getElementById('previewCard').classList.remove('hidden');
+                document.getElementById('statusArea').classList.add('hidden');
+
+                // Scroll to preview
+                document.getElementById('previewCard').scrollIntoView({ behavior: 'smooth' });
+            } catch (e) {
+                document.getElementById('statusText').innerText = "Error: " + e.message;
+            }
+        }
+
+        async function downloadVideo() {
+            const url = document.getElementById('urlInput').value;
+            const format = document.getElementById('formatSelect').value;
+            const quality = document.getElementById('qualitySelect').value;
+            const btn = document.getElementById('downloadBtn');
+
+            btn.disabled = true;
+            btn.classList.add('opacity-50');
+            document.getElementById('progressContainer').classList.remove('hidden');
+            document.getElementById('progressContainer').scrollIntoView({ behavior: 'smooth' });
+
+            try {
+                const startResponse = await fetch(`${API_BASE}/download`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url, format, quality })
+                });
+                const { job_id } = await startResponse.json();
+
+                const eventSource = new EventSource(`${API_BASE}/events/${job_id}`);
+
+                eventSource.onmessage = (event) => {
+                    const statusData = JSON.parse(event.data);
+
+                    if (statusData.status === 'downloading' || statusData.status === 'processing') {
+                        document.getElementById('etaText').innerText = statusData.eta || '--:--';
+                        document.getElementById('speedText').innerText = statusData.speed || '-- MB/s';
+                        document.getElementById('sizeInfo').innerText = statusData.size_info || '-- / --';
+
+                        let statusMsg = 'Downloading High Quality Stream...';
+                        if (statusData.status === 'processing') {
+                            statusMsg = statusData.processing_step ? `Processing: ${statusData.processing_step}...` : 'Processing Final Output...';
+                        }
+                        document.getElementById('downloadStatus').innerText = statusMsg;
+                    }
+                    else if (statusData.status === 'finished') {
+                        eventSource.close();
+                        document.getElementById('etaText').innerText = `Done`;
+                        document.getElementById('speedText').innerText = `Completed`;
+                        document.getElementById('downloadStatus').innerText = `Download Successfully`;
+                        document.getElementById('downloadStatus').classList.remove('animate-pulse');
+
+                        // Hide loader immediately
+                        const finalPulse = document.getElementById('downloadPulse');
+                        if (finalPulse) finalPulse.classList.add('hidden');
+
+                        // Fetch file
+                        window.location.href = `${API_BASE}/fetch/${job_id}`;
+
+                        setTimeout(() => {
+                            btn.disabled = false;
+                            btn.classList.remove('opacity-50');
+                        }, 3000);
+                    }
+                    else if (statusData.status === 'error') {
+                        eventSource.close();
+                        alert("Download Failed: " + statusData.error);
+                        btn.disabled = false;
+                        btn.classList.remove('opacity-50');
+                    }
+                };
+
+                eventSource.onerror = (err) => {
+                    console.error("EventSource failed:", err);
+                    // Don't close immediately as it might try to reconnect
+                };
+
+            } catch (e) {
+                alert("Critical Error: " + e.message);
+                btn.disabled = false;
+                btn.classList.remove('opacity-50');
+            }
+        }
+    </script>
+</body>
+
+</html>
