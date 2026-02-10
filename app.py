@@ -28,7 +28,16 @@ def strip_ansi(text):
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return jsonify({
+        'status': 'ok',
+        'message': 'YouTube Downloader API is running',
+        'endpoints': {
+            '/check': 'POST - Check video info',
+            '/download': 'POST - Start download',
+            '/events/<job_id>': 'GET - Download progress stream',
+            '/files/<job_id>': 'GET - Download completed file'
+        }
+    })
 
 @app.route('/check', methods=['POST'])
 def check_video():
